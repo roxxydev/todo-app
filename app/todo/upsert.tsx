@@ -12,17 +12,19 @@ import { TextInput } from "react-native-paper";
 function TodoCreate () {
   const style = useAppStyle()
   const params = useLocalSearchParams<{
-    id: string
-    data?: string
+    id?: string
   }>();
 
   const appState = useAppState();
-  const [todo, setTodo] = useState(params.data ?? '');
+  const existingTodo = params.id != null ? appState.getTodo(Number(params.id)) : undefined
+  const [title, setTitle] = useState(existingTodo?.title ?? '');
+  const [content, setContent] = useState(existingTodo?.content ?? '');
 
   const onSaveTodo = () => {
     void appState.createTodo({
       id: generateId(),
-      content: todo,
+      title,
+      content,
       status: 'pending'
     })
   }
@@ -32,7 +34,7 @@ function TodoCreate () {
       <Stack.Screen
         options={{
           header: () => {
-            const headerPrefix = params.data != null ? 'Create' : 'Update'
+            const headerPrefix = params.id != null ? 'Update' : 'Create'
             return (
               <Header title={`${headerPrefix} To Do`}/>
             )
@@ -45,14 +47,30 @@ function TodoCreate () {
         showsVerticalScrollIndicator={false}
       >
         <TextInput
-          value={todo}
+          placeholder="Title"
+          value={title}
+          multiline={false}
+          maxLength={40}
+          focusable
+          autoFocus
+          showSoftInputOnFocus
+          onChangeText={(text) => {
+            setTitle(_.trim(text))
+          }}
+          style={{
+            textAlignVertical: 'top',
+          }}
+        />
+        <TextInput
+          placeholder="Content"
+          value={content}
           multiline={true}
           maxLength={400}
           focusable
           autoFocus
           showSoftInputOnFocus
           onChangeText={(text) => {
-            setTodo(_.trim(text))
+            setContent(_.trim(text))
           }}
           style={{
             textAlignVertical: 'top',
@@ -62,11 +80,11 @@ function TodoCreate () {
           }}
         />
         <CtaButton
-          disabled={_.isEmpty(todo)}
+          disabled={_.isEmpty(title) || _.isEmpty(content)}
           onPress={onSaveTodo}
           style={{ marginBottom: 12 }}
         >
-          {params.data != null ? 'UPDATE' : 'SAVE'}
+          {params.id != null ? 'UPDATE' : 'SAVE'}
         </CtaButton>
       </ScrollView>
     </View>

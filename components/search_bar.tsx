@@ -4,13 +4,11 @@ import _ from 'lodash'
 import { Appbar, Searchbar, useTheme } from 'react-native-paper'
 
 interface SearchBarProps {
-  showBack?: boolean
   onChangeText: (query: string) => void
   onFocus?: () => void
   placeholder: string
   isLoading?: boolean
   autoFocus?: boolean
-  modal?: boolean
   searchQuery?: string
 }
 
@@ -21,17 +19,8 @@ const SearchBar = (props: SearchBarProps) => {
   return (
     <Appbar.Header
       mode="small"
-      statusBarHeight={props.modal != null ? 0 : undefined}
       theme={{ colors: { surface: theme.colors.background } }}
     >
-      {props.showBack != null && (
-        <Appbar.Action
-          icon="arrow-left"
-          onPress={() => {
-            
-          }}
-        />
-      )}
       <Searchbar
         icon="search"
         clearIcon="x-circle"
@@ -49,14 +38,6 @@ const SearchBar = (props: SearchBarProps) => {
         onFocus={props.onFocus}
         theme={{ roundness: 4 }}
       />
-      {props.modal != null && (
-        <Appbar.Action
-          icon="x-circle"
-          onPress={() => {
-            navigation.goBack()
-          }}
-        />
-      )}
     </Appbar.Header>
   )
 }

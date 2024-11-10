@@ -1,3 +1,4 @@
+import AppDivider from "@/components/app_divider";
 import CtaButton from "@/components/cta_button";
 import Header from "@/components/header";
 import { useAppState } from "@/modules/api/state";
@@ -24,7 +25,7 @@ function TodoDetails () {
         options={{
           header: () => {
             return (
-              <Header title="To Do Details"/>
+              <Header title={todo?.title}/>
             )
           }
         }}
@@ -36,6 +37,7 @@ function TodoDetails () {
       >
         {todo != null ? (
           <>
+            <AppDivider />
             <Text variant="titleMedium">{todo.content}</Text>
           </>) : (
             <Text variant="titleMedium">
