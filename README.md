@@ -1,6 +1,6 @@
-# Welcome to your Expo app 👋
+# To Do App 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is a ToDo mobile app created with [Expo](https://expo.dev) via [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
 ## Get started
 
@@ -23,28 +23,21 @@ In the output, you'll find options to open the app in a
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Or simply run
 
 ```bash
-npm run reset-project
+yarn ios
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Reasons behind choosing the libraries used in this project
 
-## Learn more
+- <h4>State Management</h4>
+  For the state management we used [zustand](https://zustand-demo.pmnd.rs/) since it is a lightweight library which has easy-to-use API and provides sychronous updates, unlike Redux’s centralized store. It also reduces boilerplate code showing simplicity and user-friendliness.
 
-To learn more about developing your project with Expo, look at the following resources:
+- <h4>Performance and Optimization</h4>
+  I've also integrated the persistence of data through zustand middleware which for the persistence storage I used the [react-native-mmkv](https://github.com/mrousavy/react-native-mmkv) as it offers a super fast key value storage as benchmaked with other storage libraries in react-native. Though the drawback of implementing it is you'll have to prebuild it if you are using expo which in my case I used expo in the project since the react native community recommended framework for React Native is Expo which is seen in the latest react native [documentation](https://reactnative.dev/docs/environment-setup).
+  In terms of UI I have used react-native-paper it follows material design and since I don't need to custom much of the UI I want so I prefer using this over other react-native UI libraries. It is also easy to customize and their documentation is great and easy to navigate through if you want to check a specific component you want to style or customize.
+  I've also considered and added [react-native-skeletons](https://github.com/kyawthura-gg/react-native-skeletons) just to show any shimmer effect when we're loading any data. The good thing with this library is that it doesn't have any native implementation and has zero dependencies. If in the future there will be api, this can be use in other components/screens as well along with [swr](https://swr.vercel.app/) for data fetching.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- <h4>Code Structure</h4>
+  For the structure, we just follow the straightforward "atomic design" but in our case retain the screens/pages on how expo interpret the paths e.g. [todo].tsx. This approach makes it easier to navigate to certain domains in app like if I want to look for something related to "todo" then I'll just navigate through the folder of todo or say if I want to look for "profile" (which we can add in the future 🙂) then again I'll just look for the folder "profile". Also under "components" we have those reusable components/ui elements that we can use in other screens as well. While under "modules" are where I put those app specific logic like managing states, utility function which for now is just todo id generator, and related styling constants.
