@@ -28,7 +28,7 @@ function TodoCreate () {
         content: _.trim(content),
         status: 'pending'
       })
-      router.navigate(`/todo/${params.id}`)
+      router.replace(`/todo/${params.id}`)
     } else {
       const newToDoId = generateId();
       void appState.createTodo({
@@ -37,7 +37,7 @@ function TodoCreate () {
         content: _.trim(content),
         status: 'pending'
       })
-      router.navigate(`/todo/${newToDoId}`)
+      router.replace(`/todo/${newToDoId}`)
     }
   }
 

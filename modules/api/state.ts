@@ -75,12 +75,12 @@ export const useAppState = create<AppState>()(
       },
       findTodo: (searchStr: string) => {
         const todos = get().todos
-        if (_.isEmpty(searchStr)) {
+        if (_.isEmpty(searchStr) || searchStr == null) {
           return todos;
         }
 
         return _.filter(todos, (todo: Todo) => {
-          const content = todo.content;
+          const content = todo != null ? todo.content : '';
           if (_.isEmpty(content)) {
             return false;
           }

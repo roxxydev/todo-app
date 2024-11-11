@@ -1,4 +1,5 @@
 import AppDivider from "@/components/app_divider";
+import CtaButton from "@/components/cta_button";
 import SearchBar from "@/components/search_bar";
 import { useAppState } from "@/modules/api/state";
 import { Todo } from "@/modules/api/types";
@@ -28,6 +29,10 @@ export default function Main() {
     setIsLoading(false);
   }, [query])
 
+  const onCreateClick = () => {
+    router.navigate('./todo/upsert')
+  }
+
   const listItem = ({
     item,
     index
@@ -35,21 +40,24 @@ export default function Main() {
     item: Todo,
     index: number
   }) => {
-    return (
-      <View key={index}>
-        <List.Item
-          description={item.content}
-          title={item.title}
-          onPress={() => {
-            router.navigate(`/todo/${item.id}`)
-          }}
-          style={{
-            marginTop: 8
-          }}
-        />
-        <AppDivider />
-      </View>
-    )
+    if (item != null) {
+      return (
+        <View key={index}>
+          <List.Item
+            description={item.content}
+            title={item.title}
+            onPress={() => {
+              router.navigate(`/todo/${item.id}`)
+            }}
+            style={{
+              marginTop: 8
+            }}
+          />
+          <AppDivider />
+        </View>
+      )
+    }
+    return null;
   }
 
 
@@ -89,6 +97,15 @@ export default function Main() {
           />
         )
       }
+      <CtaButton
+        onPress={onCreateClick}
+        style={[
+          style.safeHorizontal,
+          { marginBottom: style.safeBottom.marginBottom }
+        ]}
+      >
+        CREATE
+      </CtaButton>
     </View>
   );
 }

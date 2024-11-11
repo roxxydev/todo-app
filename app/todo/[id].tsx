@@ -3,7 +3,7 @@ import CtaButton from "@/components/cta_button";
 import Header from "@/components/header";
 import { useAppState } from "@/modules/api/state";
 import { useAppStyle } from "@/modules/utils/style";
-import { router, Stack, useLocalSearchParams, useNavigation } from "expo-router";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import _ from 'lodash';
 import { Alert, ScrollView, View } from "react-native";
 import { Appbar, Text, TextInput } from "react-native-paper";
@@ -18,8 +18,18 @@ function TodoDetails () {
   // Default to -1 if params.id is null since we only generate positive number for id
   const todo = appState.getTodo(Number(params.id));
 
+  const onUpdateStatus = () => {
+    if (todo != null) {
+      const newStatus =  todo?.status === 'pending' ? 'inprogress' : 'completed'
+      appState.updateTodo({
+        ...todo,
+        status: newStatus
+      });
+    }
+  }
+
   const onEditTodo = () => {
-    router.navigate(`./upsert?id=${params.id}`);
+    router.replace(`./upsert?id=${params.id}`);
   }
 
   const onDeleteTodo = () => {
@@ -60,8 +70,17 @@ function TodoDetails () {
       >
         {todo != null ? (
           <>
+            <Text variant="titleSmall">Status: {todo.status}</Text>
             <AppDivider />
             <Text variant="titleMedium">{todo.content}</Text>
+            {todo?.status != 'completed' && (
+              <CtaButton
+                onPress={onUpdateStatus}
+                style={{ marginTop: 6 }}
+                >
+                {`Mark as ${todo.status === 'pending' ? 'In Progress' : 'Completed'}`}
+              </CtaButton>
+            )}
           </>) : (
             <Text variant="titleMedium">
               Sorry the Todo you are looking for could not be found
