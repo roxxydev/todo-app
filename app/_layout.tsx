@@ -9,14 +9,19 @@ import {
   darkTheme,
   lightTheme
 } from '../modules/utils/style';
-import TodoList from './todo/list';
-import { PaperProvider } from 'react-native-paper';
+import { PaperProvider, useTheme } from 'react-native-paper';
+import Header from '@/components/header';
+
+export const unstable_settings = {
+  initialRouteName: '(app)',
+};
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const scheme = useColorScheme()
+  const theme = useTheme()
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -40,7 +45,16 @@ export default function RootLayout() {
             backgroundColor={scheme === 'dark' ? 'black' : 'white'}
             barStyle={scheme === 'dark' ? 'light-content' : 'dark-content'}
           />
-          <Stack initialRouteName='todo/list'/>
+          <Stack
+            screenOptions={{
+              header: () => {
+                return null
+              },
+              contentStyle: {
+                backgroundColor: theme.colors.background,
+              }
+            }}
+          />
       </PaperProvider>
     </>
   );

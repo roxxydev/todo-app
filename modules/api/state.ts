@@ -18,10 +18,24 @@ export const useAppState = create<AppState>()(
   persist(
     (set, get) => ({
       // Initial state for todos
-      todos: [],
+      todos: [
+        {
+          id: 1,
+          title: 'Test To Do 1',
+          status: 'pending',
+          content: 'Test To Do Content here.......',
+        },
+        {
+          id: 2,
+          title: 'Test To Do 2',
+          status: 'pending',
+          content: 'Test To Do Content 2 here.......',
+        }
+      ],
       getTodo: (id: number) => {
         const prevData = get().todos
         if (_.has(prevData, id)) {
+          console.log('getTodo: ', prevData[id])
           return prevData[id]
         }
         return null

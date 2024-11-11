@@ -17,10 +17,10 @@ function TodoDetails () {
   const appState = useAppState();
 
   // Default to -1 if params.id is null since we only generate positive number for id
-  const todo = appState.getTodo(Number(params.id ?? -1));
+  const todo = appState.getTodo(Number(params.id));
 
   return (
-    <View>
+    <View style={style.container}>
       <Stack.Screen
         options={{
           header: () => {

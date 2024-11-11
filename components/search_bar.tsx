@@ -44,8 +44,7 @@ const SearchBar = (props: SearchBarProps) => {
 
 const styles = StyleSheet.create({
   searchbar: {
-    flex: 1,
-    marginRight: 10
+    flex: 1
   }
 })
 
