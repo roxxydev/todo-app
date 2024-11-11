@@ -20,10 +20,10 @@ export default function Main() {
   const [result, setResult] = useState<Todo[]>(appState.todos);
 
   useEffect(() => {
-    if (query && !_.isEmpty(query)) {
-      setResult(appState.findTodo(query));
-    } else {
+    if (_.isEmpty(query)) {
       setResult(appState.todos);
+    } else {
+      setResult(appState.findTodo(query ?? ''));
     }
     setIsLoading(false);
   }, [query])

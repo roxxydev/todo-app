@@ -33,56 +33,59 @@ export const useAppState = create<AppState>()(
         }
       ],
       getTodo: (id: number) => {
-        const prevData = get().todos
-        if (_.has(prevData, id)) {
-          console.log('getTodo: ', prevData[id])
-          return prevData[id]
+        const existingTodo = _.find(get().todos, { id });
+        if (existingTodo) {
+          return existingTodo;
         }
         return null
       },
       createTodo: (newData: Todo) => {
         const data = get().todos
         set({
-          todos: {
+          todos: [
             ...data,
-            ...newData
-          }
+            ...[newData]
+          ]
         });
         return newData;
       },
       updateTodo: (newData: Todo) => {
-        const data = get().todos;
-        const existingTodo = _.find(data, { id: newData.id });
-        if (existingTodo) {
-          data[existingTodo.id] = {
-            id: existingTodo.id,
-            status: newData.status,
-            content: newData.content,
-          }
+        const foundTodoIndex = _.findIndex(get().todos, { id: newData.id });
+        if (foundTodoIndex > -1) {
+          const data = get().todos
+          data[foundTodoIndex] = newData;
           set({
-            todos: {
-              ...data,
-              ...newData
-            }
+            todos: data,
           });
-          return data[existingTodo.id];
+          return newData;
         }
         return null;
       },
       deleteTodo: (id: number) => {
         const data = get().todos
-        const existingTodo = _.find(data, { id });
-        if (existingTodo) {
-          delete data[id];
+        const foundTodoIndex = _.findIndex(data, { id });
+        if (foundTodoIndex > -1) {
+          delete data[foundTodoIndex];
+          set({
+            todos: data
+          });
           return true
         }
         return false
       },
       findTodo: (searchStr: string) => {
         const todos = get().todos
-        return _.filter(todos, (todo: Todo) =>
-          todo.content.toLowerCase().includes(searchStr.toLowerCase())
-        );
+        if (_.isEmpty(searchStr)) {
+          return todos;
+        }
+
+        return _.filter(todos, (todo: Todo) => {
+          const content = todo.content;
+          if (_.isEmpty(content)) {
+            return false;
+          }
+          return _.includes(_.toLower(content), _.toLower(searchStr))
+        });
       }
     }),
     {

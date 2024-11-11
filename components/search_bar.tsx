@@ -22,8 +22,8 @@ const SearchBar = (props: SearchBarProps) => {
       theme={{ colors: { surface: theme.colors.background } }}
     >
       <Searchbar
-        icon="search"
-        clearIcon="x-circle"
+        icon="magnify"
+        clearIcon="close"
         loading={props.isLoading}
         autoCapitalize="none"
         autoComplete="off"

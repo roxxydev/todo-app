@@ -3,7 +3,7 @@ import Header from "@/components/header";
 import { useAppState } from "@/modules/api/state";
 import { useAppStyle } from "@/modules/utils/style";
 import { generateId } from "@/modules/utils/utils";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import _ from 'lodash';
 import { useState } from "react";
 import { ScrollView, View } from "react-native";
@@ -21,12 +21,24 @@ function TodoCreate () {
   const [content, setContent] = useState(existingTodo?.content ?? '');
 
   const onSaveTodo = () => {
-    void appState.createTodo({
-      id: generateId(),
-      title,
-      content,
-      status: 'pending'
-    })
+    if (params.id != null) {
+      void appState.updateTodo({
+        id: Number(params.id),
+        title: _.trim(title),
+        content: _.trim(content),
+        status: 'pending'
+      })
+      router.navigate(`/todo/${params.id}`)
+    } else {
+      const newToDoId = generateId();
+      void appState.createTodo({
+        id: newToDoId,
+        title: _.trim(title),
+        content: _.trim(content),
+        status: 'pending'
+      })
+      router.navigate(`/todo/${newToDoId}`)
+    }
   }
 
   return (
@@ -55,7 +67,7 @@ function TodoCreate () {
           autoFocus
           showSoftInputOnFocus
           onChangeText={(text) => {
-            setTitle(_.trim(text))
+            setTitle(text)
           }}
           style={{
             textAlignVertical: 'top',
@@ -70,7 +82,7 @@ function TodoCreate () {
           autoFocus
           showSoftInputOnFocus
           onChangeText={(text) => {
-            setContent(_.trim(text))
+            setContent(text)
           }}
           style={{
             textAlignVertical: 'top',
